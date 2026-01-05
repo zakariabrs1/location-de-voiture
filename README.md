@@ -1,4 +1,4 @@
-# Nom du Projet (ex: MyManager - Gestion Hospitalière)
+# Location-voiture
 
 <!-- Mettez un court slogan ou une description en une phrase ici -->
 > Application Backoffice de gestion réalisée dans le cadre du module Dévelopement web.
@@ -6,8 +6,8 @@
 ## 🔗 Liens Importants
 
 <!-- REMPLACEZ LES LIENS CI-DESSOUS -->
-- **APPLICATION DÉPLOYÉE (Live Demo) :** [CLIQUEZ ICI POUR VOIR LE SITE](https://)
-- **Repository GitHub :** [Lien vers ce repo](https://)
+- **APPLICATION DÉPLOYÉE (Live Demo) :** [CLIQUEZ ICI POUR VOIR LE SITE]https://redaelbek1.github.io/location-de-voiture/
+- **Repository GitHub :** [Lien vers ce repo]https://github.com/redaelbek1/location-de-voiture
 
 ---
 
@@ -17,9 +17,9 @@
 
 | Prénom & Nom | Rôle / Tâches principales | Lien Github |
 |--------------|---------------------------|-------------|
-| Zakaria Bouariss  | (ex: Dashboard, ChartJS)  | [@pseudo](https://github.com/pseudo) |
-| Ishak Ouatiq   | (ex: CRUD Utilisateurs)   | [@pseudo](https://github.com/pseudo) |
-| Mohamed Reda El Bekbachi  | (ex: CSS, Responsive)     | [@pseudo](https://github.com/pseudo) |
+| Étudiant 1   | (ex: Dashboard, ChartJS)  | [@pseudo](https://github.com/pseudo) |
+| Étudiant 2   | (ex: CRUD Utilisateurs)   | [@pseudo](https://github.com/pseudo) |
+| Étudiant 3   | (ex: CSS, Responsive)     | [@pseudo](https://github.com/pseudo) |
 
 ---
 
@@ -34,7 +34,7 @@
 <!-- Cochez les cases [x] pour les fonctionnalités terminées. Laissez [ ] pour ce qui n'est pas fait. -->
 
 ### Fonctionnalités Principales
-- [X] **CRUD 1 :** [Nom Entité, ex: Utilisateurs] (Create, Read, Update, Delete)
+- [ ] **CRUD 1 :** [Nom Entité, ex: Utilisateurs] (Create, Read, Update, Delete)
 - [ ] **CRUD 2 :** [Nom Entité]
 - [ ] **CRUD 3 :** [Nom Entité]
 - [ ] **CRUD 4 :** [Nom Entité]

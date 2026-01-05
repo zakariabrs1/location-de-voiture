@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav>
+  <div class="nav-container">
+    <div class="nav-links">
+      <a href="#" data-page="dashboard" class="nav-link active">Dashboard</a>
+      <a href="#" data-page="voitures" class="nav-link">Voitures</a>
+      <a href="#" data-page="clients" class="nav-link">Clients</a>
+      <a href="#" data-page="reservations" class="nav-link">Réservations</a>
+      <a href="#" data-page="factures" class="nav-link">Factures</a>
+      <a href="#" data-page="utilisateurs" class="nav-link">Utilisateurs</a>
+    </div>
+    <a href="index.html" id="btn-deconnexion" class="nav-link-deconnexion">
+      <i class="fas fa-sign-out-alt"></i> Déconnexion
+    </a>
+  </div>
+</nav>
+
+<button id="menu-toggle" class="menu-toggle" aria-label="Menu">
+  <i class="fas fa-bars"></i>
+</button>
+
+<main>
+  <!-- Section Dashboard -->
+  <section id="dashboard" class="page-section active">
+    <div class="dashboard-header">
+      <h1>Tableau de bord</h1>
+    </div>
+    <section class="cards">
+      <div class="card">
+        <div class="card-title">Total voitures</div>
+        <div class="card-value" id="stat-total-voitures">0</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Clients</div>
+        <div class="card-value" id="stat-total-clients">0</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Réservations</div>
+        <div class="card-value" id="stat-total-reservations">0</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Revenus</div>
+        <div class="card-value" id="stat-total-revenus">0 DH</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Disponibles</div>
+        <div class="card-value" id="stat-voitures-disponibles">0</div>
+      </div>
+    </section>
+
+    <!-- Graphiques -->
+    <section class="charts-section">
+      <div class="chart-container">
+        <canvas id="chart-voitures-statut"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="chart-reservations-mois"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="chart-revenus-mois"></canvas>
+      </div>
+
+    </section>
+  </section>
+
+  <!-- Section Voitures -->
+  <section id="voitures" class="page-section">
+    <h2>Gestion des voitures</h2>
+    <form id="form-voiture">
+      <input type="hidden" id="voiture-id" value="">
+      <input type="text" id="voiture-marque" placeholder="Marque" required>
+      <input type="text" id="voiture-modele" placeholder="Modèle" required>
+      <input type="number" id="voiture-prix" placeholder="Prix / jour" min="0" required>
+      <button type="submit" id="btn-voiture-submit">Ajouter</button>
+      <button type="button" id="btn-voiture-cancel" class="btn-cancel">Annuler</button>
+    </form>
+
+    <input type="text" id="filter-voitures" placeholder="Filtrer..." class="filter-input">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Marque</th>
+          <th>Modèle</th>
+          <th>Prix/jour</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="table-voitures-body">
+      </tbody>
+    </table>
+
+    <button id="btn-export-voitures">Exporter CSV</button>
+  </section>
+
+  <!-- Section Modifier Voiture -->
+  <section id="voiture-edit" class="page-section">
+    <h2>Modifier la voiture</h2>
+    <form id="form-voiture-edit">
+      <input type="hidden" id="voiture-edit-id" value="">
+      <input type="text" id="voiture-edit-marque" placeholder="Marque" required>
+      <input type="text" id="voiture-edit-modele" placeholder="Modèle" required>
+      <input type="number" id="voiture-edit-prix" placeholder="Prix / jour" min="0" required>
+      <select id="voiture-edit-statut">
+        <option value="Disponible">Disponible</option>
+        <option value="En location">En location</option>
+        <option value="En maintenance">En maintenance</option>
+      </select>
+      <button type="submit">Enregistrer les modifications</button>
+      <a href="#" class="back-link" data-back="voitures">Annuler</a>
+    </form>
+  </section>
+
+  <!-- Section Supprimer Voiture -->
+  <section id="voiture-delete" class="page-section">
+    <h2>Supprimer la voiture</h2>
+    <div id="voiture-delete-info" class="delete-info">
+      <p><strong>Êtes-vous sûr de vouloir supprimer cette voiture ?</strong></p>
+      <ul id="voiture-delete-details" class="delete-details"></ul>
+      <div class="delete-buttons-container">
+        <button id="btn-confirm-delete-voiture" class="btn-confirm-delete">Oui, supprimer</button>
+        <a href="#" class="back-link back-link-in-delete" data-back="voitures">Annuler</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Détails Voiture -->
+  <section id="voiture-details" class="page-section">
+    <h2>Détails de la voiture</h2>
+    <ul id="voiture-details-list">
+    </ul>
+
+    <button id="btn-export-voiture-pdf">Exporter PDF</button>
+    <a href="#" class="back-link" data-back="voitures">Retour</a>
+  </section>
+
+  <!-- Section Clients -->
+  <section id="clients" class="page-section">
+    <h2>Clients</h2>
+    <form id="form-client">
+      <input type="hidden" id="client-id" value="">
+      <input type="text" id="client-nom" placeholder="Nom complet" required>
+      <input type="email" id="client-email" placeholder="Email" required>
+      <input type="text" id="client-telephone" placeholder="Téléphone" required>
+      <input type="text" id="client-adresse" placeholder="Adresse" required>
+      <button type="submit" id="btn-client-submit">Ajouter</button>
+      <button type="button" id="btn-client-cancel" class="btn-cancel">Annuler</button>
+    </form>
+
+    <input type="text" id="filter-clients" placeholder="Filtrer..." class="filter-input">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Téléphone</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="table-clients-body">
+      </tbody>
+    </table>
+
+    <button id="btn-export-clients">Exporter CSV</button>
+  </section>
+
+  <!-- Section Modifier Client -->
+  <section id="client-edit" class="page-section">
+    <h2>Modifier le client</h2>
+    <form id="form-client-edit">
+      <input type="hidden" id="client-edit-id" value="">
+      <input type="text" id="client-edit-nom" placeholder="Nom complet" required>
+      <input type="email" id="client-edit-email" placeholder="Email" required>
+      <input type="text" id="client-edit-telephone" placeholder="Téléphone" required>
+      <input type="text" id="client-edit-adresse" placeholder="Adresse" required>
+      <button type="submit">Enregistrer les modifications</button>
+      <a href="#" class="back-link" data-back="clients">Annuler</a>
+    </form>
+  </section>
+
+  <!-- Section Supprimer Client -->
+  <section id="client-delete" class="page-section">
+    <h2>Supprimer le client</h2>
+    <div id="client-delete-info" class="delete-info">
+      <p><strong>Êtes-vous sûr de vouloir supprimer ce client ?</strong></p>
+      <ul id="client-delete-details" class="delete-details"></ul>
+      <div class="delete-buttons-container">
+        <button id="btn-confirm-delete-client" class="btn-confirm-delete">Oui, supprimer</button>
+        <a href="#" class="back-link back-link-in-delete" data-back="clients">Annuler</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Détails Client -->
+  <section id="client-details" class="page-section">
+    <h2>Détails du client</h2>
+
+    <ul id="client-details-list">
+    </ul>
+
+    <button id="btn-export-client-pdf">Exporter PDF</button>
+    <a href="#" class="back-link" data-back="clients">Retour</a>
+  </section>
+
+  <!-- Section Réservations -->
+  <section id="reservations" class="page-section">
+    <h2>Réservations</h2>
+    <form id="form-reservation">
+      <input type="hidden" id="reservation-id" value="">
+      <input type="text" id="reservation-client-nom" placeholder="Nom du client" required>
+      <select id="reservation-voiture-id" required>
+        <option value="">Sélectionner une voiture</option>
+      </select>
+      <input type="date" id="reservation-date-debut" required>
+      <input type="date" id="reservation-date-fin" required>
+      <button type="submit" id="btn-reservation-submit">Ajouter</button>
+      <button type="button" id="btn-reservation-cancel" class="btn-cancel">Annuler</button>
+    </form>
+
+    <input type="text" id="filter-reservations" placeholder="Filtrer..." class="filter-input">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Client</th>
+          <th>Voiture</th>
+          <th>Date début</th>
+          <th>Date fin</th>
+          <th>Prix total</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="table-reservations-body">
+      </tbody>
+    </table>
+
+    <button id="btn-export-reservations">Exporter CSV</button>
+  </section>
+
+  <!-- Section Modifier Réservation -->
+  <section id="reservation-edit" class="page-section">
+    <h2>Modifier la réservation</h2>
+    <form id="form-reservation-edit">
+      <input type="hidden" id="reservation-edit-id" value="">
+      <input type="text" id="reservation-edit-client-nom" placeholder="Nom du client" required>
+      <select id="reservation-edit-voiture-id" required>
+        <option value="">Sélectionner une voiture</option>
+      </select>
+      <input type="date" id="reservation-edit-date-debut" required>
+      <input type="date" id="reservation-edit-date-fin" required>
+      <select id="reservation-edit-statut" required>
+        <option value="Active">Active</option>
+        <option value="Terminee">Terminée</option>
+        <option value="Annulee">Annulée</option>
+      </select>
+      <button type="submit">Enregistrer les modifications</button>
+      <a href="#" class="back-link" data-back="reservations">Annuler</a>
+    </form>
+  </section>
+
+  <!-- Section Supprimer Réservation -->
+  <section id="reservation-delete" class="page-section">
+    <h2>Supprimer la réservation</h2>
+    <div id="reservation-delete-info" class="delete-info">
+      <p><strong>Êtes-vous sûr de vouloir supprimer cette réservation ?</strong></p>
+      <ul id="reservation-delete-details" class="delete-details"></ul>
+      <div class="delete-buttons-container">
+        <button id="btn-confirm-delete-reservation" class="btn-confirm-delete">Oui, supprimer</button>
+        <a href="#" class="back-link back-link-in-delete" data-back="reservations">Annuler</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Détails Réservation -->
+  <section id="reservation-details" class="page-section">
+    <h2>Détails de la réservation</h2>
+    <ul id="reservation-details-list">
+    </ul>
+
+    <button id="btn-export-reservation-pdf">Exporter PDF</button>
+    <a href="#" class="back-link" data-back="reservations">Retour</a>
+  </section>
+
+  <!-- Section Factures -->
+  <section id="factures" class="page-section">
+    <h2>Factures</h2>
+    <input type="text" id="filter-factures" placeholder="Filtrer..." class="filter-input">
+    <table>
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Client</th>
+          <th>Montant</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="table-factures-body">
+      </tbody>
+    </table>
+
+    <button id="btn-export-factures">Exporter CSV</button>
+  </section>
+
+  <!-- Section Modifier Facture -->
+  <section id="facture-edit" class="page-section">
+    <h2>Modifier le statut de la facture</h2>
+    <form id="form-facture-edit">
+      <input type="hidden" id="facture-edit-id" value="">
+      <label>Statut de la facture :</label>
+      <select id="facture-edit-statut" required>
+        <option value="Payee">Payee</option>
+        <option value="En attente">En attente</option>
+        <option value="Impayee">Impayee</option>
+      </select>
+      <button type="submit">Enregistrer les modifications</button>
+      <a href="#" class="back-link" data-back="factures">Annuler</a>
+    </form>
+  </section>
+
+  <!-- Section Détails Facture -->
+  <section id="facture-details" class="page-section">
+    <h2>Détails de la facture</h2>
+    <ul id="facture-details-list">
+    </ul>
+
+    <button id="btn-export-facture-pdf">Exporter PDF</button>
+    <a href="#" class="back-link" data-back="factures">Retour</a>
+  </section>
+
+  <!-- Section Utilisateurs -->
+  <section id="utilisateurs" class="page-section">
+    <h2>Utilisateurs</h2>
+    <form id="form-utilisateur">
+      <input type="hidden" id="utilisateur-id" value="">
+      <input type="text" id="utilisateur-nom" placeholder="Nom complet" required>
+      <input type="email" id="utilisateur-email" placeholder="Email" required>
+      <select id="utilisateur-role" required>
+        <option value="">Sélectionner un rôle</option>
+        <option value="Administrateur">Administrateur</option>
+        <option value="Gestionnaire">Gestionnaire</option>
+        <option value="Operateur">Opérateur</option>
+        <option value="Superviseur">Superviseur</option>
+      </select>
+      <select id="utilisateur-statut" required>
+        <option value="Actif">Actif</option>
+        <option value="Inactif">Inactif</option>
+      </select>
+      <button type="submit" id="btn-utilisateur-submit">Ajouter</button>
+      <button type="button" id="btn-utilisateur-cancel" class="btn-cancel">Annuler</button>
+    </form>
+
+    <input type="text" id="filter-utilisateurs" placeholder="Filtrer..." class="filter-input">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="table-utilisateurs-body">
+      </tbody>
+    </table>
+
+    <button id="btn-export-utilisateurs">Exporter CSV</button>
+  </section>
+
+  <!-- Section Modifier Utilisateur -->
+  <section id="utilisateur-edit" class="page-section">
+    <h2>Modifier l'utilisateur</h2>
+    <form id="form-utilisateur-edit">
+      <input type="hidden" id="utilisateur-edit-id" value="">
+      <input type="text" id="utilisateur-edit-nom" placeholder="Nom complet" required>
+      <input type="email" id="utilisateur-edit-email" placeholder="Email" required>
+      <select id="utilisateur-edit-role" required>
+        <option value="">Sélectionner un rôle</option>
+        <option value="Administrateur">Administrateur</option>
+        <option value="Gestionnaire">Gestionnaire</option>
+        <option value="Operateur">Opérateur</option>
+        <option value="Superviseur">Superviseur</option>
+      </select>
+      <select id="utilisateur-edit-statut" required>
+        <option value="Actif">Actif</option>
+        <option value="Inactif">Inactif</option>
+      </select>
+      <button type="submit">Enregistrer les modifications</button>
+      <a href="#" class="back-link" data-back="utilisateurs">Annuler</a>
+    </form>
+  </section>
+
+  <!-- Section Supprimer Utilisateur -->
+  <section id="utilisateur-delete" class="page-section">
+    <h2>Supprimer l'utilisateur</h2>
+    <div id="utilisateur-delete-info" class="delete-info">
+      <p><strong>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</strong></p>
+      <ul id="utilisateur-delete-details" class="delete-details"></ul>
+      <div class="delete-buttons-container">
+        <button id="btn-confirm-delete-utilisateur" class="btn-confirm-delete">Oui, supprimer</button>
+        <a href="#" class="back-link back-link-in-delete" data-back="utilisateurs">Annuler</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Détails Utilisateur -->
+  <section id="utilisateur-details" class="page-section">
+    <h2>Détails de l'utilisateur</h2>
+    <ul id="utilisateur-details-list">
+    </ul>
+
+    <button id="btn-export-utilisateur-pdf">Exporter PDF</button>
+    <a href="#" class="back-link" data-back="utilisateurs">Retour</a>
+  </section>
+
+</main>
+
+<script src="js/fake-data.js"></script>
+<script src="js/dashboard-stats.js"></script>
+<script src="js/dashboard-charts.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/crud-voitures.js"></script>
+<script src="js/crud-clients.js"></script>
+<script src="js/crud-reservations.js"></script>
+<script src="js/crud-factures.js"></script>
+<script src="js/crud-utilisateurs.js"></script>
+<script src="js/navigation.js"></script>
+</body>
+</html>
+

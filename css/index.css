@@ -1,0 +1,248 @@
+/* ============================================
+   VARIABLES CSS - Thème noir et blanc
+   ============================================ */
+:root {
+  --couleur-noir: #1a1a1a;
+  --couleur-blanc: #ffffff;
+  --couleur-gris-clair: #f5f5f5;
+  --couleur-gris-moyen: #e0e0e0;
+  --couleur-gris-fonce: #666666;
+  --couleur-vert-succes: #27ae60;
+  --couleur-rouge-erreur: #e74c3c;
+  --ombres-douces: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --ombres-hover: 0 8px 15px rgba(0, 0, 0, 0.2);
+  --transition-fluide: all 0.3s ease;
+}
+
+/* ============================================
+   RESET ET BASE
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', Arial, sans-serif;
+  /* Dégradé noir/gris pour le background */
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: var(--couleur-noir);
+}
+
+/* ============================================
+   CONTAINER PRINCIPAL
+   ============================================ */
+.container {
+  background: var(--couleur-blanc);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: var(--ombres-hover);
+  width: 100%;
+  max-width: 450px;
+  animation: fadeInUp 0.6s ease;
+}
+
+/* Animation d'entrée élégante */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   TITRE
+   ============================================ */
+h1 {
+  text-align: center;
+  color: var(--couleur-noir);
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* ============================================
+   FORMULAIRE
+   ============================================ */
+.form-group {
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  font-weight: 500;
+  color: var(--couleur-noir);
+  margin-bottom: 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   CHAMP INPUT EMAIL
+   ============================================ */
+input[type="email"] {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid var(--couleur-gris-moyen);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--couleur-gris-clair);
+  transition: var(--transition-fluide);
+  color: var(--couleur-noir);
+}
+
+input[type="email"]:focus {
+  outline: none;
+  border-color: var(--couleur-noir);
+  background-color: var(--couleur-blanc);
+  box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+}
+
+/* Style pour email valide */
+input.valide {
+  border-color: var(--couleur-vert-succes);
+  background-color: #f0f9f6;
+}
+
+/* Style pour email invalide */
+input.invalide {
+  border-color: var(--couleur-rouge-erreur);
+  background-color: #fdf5f5;
+}
+
+/* ============================================
+   MESSAGES DE VALIDATION
+   ============================================ */
+#message {
+  display: block;
+  font-size: 13px;
+  margin-top: 8px;
+  min-height: 20px;
+  font-weight: 500;
+  padding-left: 5px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+#message.succes {
+  color: var(--couleur-vert-succes);
+}
+
+#message.erreur {
+  color: var(--couleur-rouge-erreur);
+}
+
+/* ============================================
+   BOUTON DE VALIDATION
+   ============================================ */
+button {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--couleur-noir);
+  color: var(--couleur-blanc);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: var(--transition-fluide);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: var(--ombres-douces);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effet de hover avec transformation */
+button:hover {
+  background-color: #2d2d2d;
+  box-shadow: var(--ombres-hover);
+  transform: translateY(-2px);
+}
+
+/* Effet de clic */
+button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Animation de brillance au hover */
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+/* Tablette */
+@media (max-width: 768px) {
+  .container {
+    padding: 30px;
+    max-width: 400px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  body {
+    padding: 15px;
+  }
+
+  .container {
+    padding: 25px;
+    border-radius: 12px;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 25px;
+  }
+
+  input[type="email"] {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+
+  button {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
